@@ -24,6 +24,9 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
         {
             // Add your code here.
             //throw new NotImplementedException();
+
+            string[] args = equation.Split(new char[] { '*', '=' });
+
             string firstArg = equation.Split('*')[0];
             string secondArg = equation.Split('*')[1].Split('=')[0];
             string result = equation.Split('=')[1];
@@ -33,18 +36,63 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 
             //setting up finalResult which is calculated by the given 2 arguements
             //setting the value of givenArgument for which the corresponding value is to be found.
-			if(firstArg.Contains("?")){
-				finalResult = ((float)Int32.Parse(result))/Int32.Parse(secondArg);
-				givenResult += firstArg;
+			if(args[0].Contains("?")){
+                if (Int32.TryParse(args[2], out int a)){
+                    if (Int32.TryParse(args[1], out int b)){
+                        finalResult = (float)a / b;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else {
+                    return -1;
+                }
+				givenResult = args[0];
 			}
-			else if(secondArg.Contains("?")){
-				finalResult = ((float)Int32.Parse(result))/Int32.Parse(firstArg);	
-				givenResult += secondArg;
+			else if(args[1].Contains("?")){
+
+                if (Int32.TryParse(args[2], out int a)) {
+                    if(Int32.TryParse(args[0], out int b))
+                    {
+                        finalResult = (float)a / b;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+	
+				givenResult = args[1];
 			}
-			else if(result.Contains("?")){
-				finalResult = Int32.Parse(firstArg)*Int32.Parse(secondArg);
-				givenResult = result;
+			else if(args[2].Contains("?")){
+
+                if (Int32.TryParse(args[0], out int a))
+                {
+                    if (Int32.TryParse(args[1], out int b))
+                    {
+                        finalResult = a * b;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+				givenResult = args[2];
 			}
+            // solution when there is no "?" in the equation
+            else{
+                return -1;
+            }
 			
 			if(finalResult != (int)finalResult){
                 //if finalResult(desired number) has no integer solution
@@ -61,16 +109,18 @@ namespace Tavisca.Bootcamp.LanguageBasics.Exercise1
 			}
 			else{
 				for(int i = 0; i < temporary.Length; i++){
-					if(temporary[i] != givenResult[i] && givenResult[i] == '?'){
-                        //Condition to check whether the current index is the required index
-                        //returning the integer value of current character
-						return (int)(temporary[i] - 48);
-					}
-					else if(temporary[i] != givenResult[i] && givenResult[i] != '?'){
-                        //If mismatch occurs in the integer values of two string, means results are not same
-                        //returning -1 
-						return -1;
-					}
+                    if(temporary[i] != givenResult[i]){
+                        if(givenResult[i] == '?'){
+                            //Condition to check whether the current index is the required index
+                            //returning the integer value of current character
+						    return (int)(temporary[i] - 48);
+					    }
+					    else if(givenResult[i] != '?'){
+                            //If mismatch occurs in the integer values of two string, means results are not same
+                            //returning -1 
+						    return -1;
+					    }
+                    }
 				}
 			}
 			return -1;
