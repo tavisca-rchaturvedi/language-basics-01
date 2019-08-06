@@ -53,7 +53,6 @@ public class FixMultiplicationTest {
     public void isFindArgumentsAndResultStringsTest(){
         String equation = "42*47=1?74";
         String[] parameters = new String[]{"42","47","1?74"};
-        FixMultiplication fixMultiplication = new FixMultiplication();
-        assertArrayEquals(parameters, fixMultiplication.findArgumentsAndResultStrings(equation));
+        assertArrayEquals(parameters, TransformationHelper.findArgumentsAndResultStrings(equation));
     }
 }
