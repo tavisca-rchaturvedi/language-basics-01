@@ -16,12 +16,8 @@ public class FixMultiplication {
         else{
             String[] parameters = TransformationHelper.findArgumentsAndResultStrings(equation);
             if(parameters.length > 1){
-                String argument1 = parameters[0];
-                String argument2 = parameters[1];
-                String result = parameters[2];
                 Matcher argumentMatcher;
-                argumentMatcher = getPattern(argument1, argument2, result);
-
+                argumentMatcher = getPattern(parameters[0], parameters[1], parameters[2]);
                 return TransformationHelper.tryMatchingArgument(argumentMatcher);
             }
             else{
@@ -31,7 +27,6 @@ public class FixMultiplication {
     }
 
     public Matcher getPattern(String argument1, String argument2, String result) {
-        double expectedOutput;
         Matcher matcher;
         if(argument1.contains("?")){
             matcher = (new ArgumentMatcher()).getMatcher(argument1,argument2,result);
