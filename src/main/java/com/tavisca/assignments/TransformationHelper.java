@@ -21,4 +21,28 @@ public class TransformationHelper {
             return new String[]{};
         }
     }
+
+    public static int tryMatchingArgument(Matcher argumentMatcher) {
+        if(argumentMatcher.matches()){
+            try{
+                return Integer.parseInt(argumentMatcher.group(1));
+            }
+            catch(NumberFormatException n) {
+                return -1;
+            }
+        }
+        else{
+            return -1;
+        }
+    }
+
+    public static String getExpectedOutputInString(double expectedOutput) {
+        String expectedValue;
+        if (expectedOutput == (int) expectedOutput) {
+            expectedValue = "" + (int) expectedOutput;
+        } else {
+            expectedValue = "-1";
+        }
+        return expectedValue;
+    }
 }

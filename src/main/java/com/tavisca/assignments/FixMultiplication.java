@@ -1,11 +1,16 @@
 package com.tavisca.assignments;
 
+import com.tavisca.assignments.matcher.ArgumentMatcher;
+import com.tavisca.assignments.matcher.ResultMatcher;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FixMultiplication {
     public int findDigit(String equation){
-        if(!equation.contains("?")){
+        Matcher validEquationMatcher = Pattern.compile("(.*)(\\?)(.*)").matcher(equation);
+
+        if(!validEquationMatcher.matches()){
             return -1;
         }
         else{
@@ -15,9 +20,9 @@ public class FixMultiplication {
                 String argument2 = parameters[1];
                 String result = parameters[2];
                 Matcher argumentMatcher;
-                argumentMatcher = getMatcher(argument1, argument2, result);
+                argumentMatcher = getPattern(argument1, argument2, result);
 
-                return tryMatchingArgument(argumentMatcher);
+                return TransformationHelper.tryMatchingArgument(argumentMatcher);
             }
             else{
                 return -1;
@@ -25,53 +30,24 @@ public class FixMultiplication {
         }
     }
 
-    private int tryMatchingArgument(Matcher argumentMatcher) {
-        if(argumentMatcher.matches()){
-            try{
-                return Integer.parseInt(argumentMatcher.group(1));
-            }
-            catch(NumberFormatException n) {
-                return -1;
-            }
-        }
-        else{
-            return -1;
-        }
-    }
-
-    private Matcher getMatcher(String argument1, String argument2, String result) {
+    public Matcher getPattern(String argument1, String argument2, String result) {
         double expectedOutput;
-        String expectedValue;
-        Pattern argumentPattern;
+        Matcher matcher;
         if(argument1.contains("?")){
-            expectedOutput =  Double.parseDouble(result)/Double.parseDouble((argument2));
-            expectedValue = getExpectedOutputInString(expectedOutput);
-            argumentPattern = Pattern.compile(argument1.replace("?","(.?)"));
+            matcher = (new ArgumentMatcher()).getMatcher(argument1,argument2,result);
         }
 
         else if(argument2.contains("?")){
-            expectedOutput = Double.parseDouble(result)/Double.parseDouble(argument1);
-            expectedValue = getExpectedOutputInString(expectedOutput);
-            argumentPattern = Pattern.compile(argument2.replace("?","(.?)"));
+            matcher = (new ArgumentMatcher()).getMatcher(argument2,argument1,result);
         }
 
         else{
-            expectedOutput = Double.parseDouble(argument1)*Double.parseDouble(argument2);
-            expectedValue = getExpectedOutputInString(expectedOutput);
-            argumentPattern = Pattern.compile(result.replace("?","(.?)"));
+            matcher = (new ResultMatcher()).getMatcher(argument1,argument2,result);
         }
-        return argumentPattern.matcher(expectedValue);
+        return matcher;
     }
 
-    private String getExpectedOutputInString(double expectedOutput) {
-        String expectedValue;
-        if (expectedOutput == (int) expectedOutput) {
-            expectedValue = "" + (int) expectedOutput;
-        } else {
-            expectedValue = "-1";
-        }
-        return expectedValue;
-    }
+
 
 
 }
